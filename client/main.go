@@ -4,13 +4,13 @@ import (
 	"context"
 	"log"
 
-	"github.com/go-programming-tour-book/tag-service/global"
-	"github.com/go-programming-tour-book/tag-service/internal/middleware"
-	"github.com/go-programming-tour-book/tag-service/pkg/tracer"
-	pb "github.com/go-programming-tour-book/tag-service/proto"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
+	"tag-service/global"
+	"tag-service/internal/middleware"
+	"tag-service/pkg/tracer"
+	pb "tag-service/proto"
 )
 
 func init() {

@@ -1,0 +1,1 @@
+sudo protoc -I=/mnt/d/gopath/src/ -I=. --go_out=. ./*.proto

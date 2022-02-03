@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	pb "github.com/go-programming-tour-book/tag-service/proto"
 	"google.golang.org/grpc"
+	pb "tag-service/proto"
 )
 
 func main() {

@@ -6,11 +6,11 @@ import (
 	"net"
 	"net/http"
 
-	pb "github.com/go-programming-tour-book/tag-service/proto"
-	"github.com/go-programming-tour-book/tag-service/server"
 	"github.com/soheilhy/cmux"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	pb "tag-service/proto"
+	"tag-service/server"
 )
 
 var port string

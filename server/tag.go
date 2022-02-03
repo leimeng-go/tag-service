@@ -4,17 +4,17 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/go-programming-tour-book/tag-service/pkg/bapi"
-	"github.com/go-programming-tour-book/tag-service/pkg/errcode"
+	"tag-service/pkg/bapi"
+	"tag-service/pkg/errcode"
 
 	//"encoding/json"
 
-	//"github.com/go-programming-tour-book/tag-service/pkg/bapi"
+	//"tag-service/pkg/bapi"
 
 	"google.golang.org/grpc"
 
-	//"github.com/go-programming-tour-book/tag-service/pkg/errcode"
-	pb "github.com/go-programming-tour-book/tag-service/proto"
+	//"tag-service/pkg/errcode"
+	pb "tag-service/proto"
 )
 
 type TagServer struct {

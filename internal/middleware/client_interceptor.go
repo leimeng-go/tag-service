@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/go-programming-tour-book/tag-service/global"
-	"github.com/go-programming-tour-book/tag-service/pkg/metatext"
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 	"google.golang.org/grpc/metadata"
+	"tag-service/global"
+	"tag-service/pkg/metatext"
 
 	"google.golang.org/grpc"
 )

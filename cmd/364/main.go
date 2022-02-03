@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-programming-tour-book/tag-service/internal/middleware"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"go.etcd.io/etcd/proxy/grpcproxy"
+	"tag-service/internal/middleware"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -21,11 +21,11 @@ import (
 	"golang.org/x/net/http2/h2c"
 
 	"github.com/coreos/etcd/clientv3"
-	pb "github.com/go-programming-tour-book/tag-service/proto"
-	"github.com/go-programming-tour-book/tag-service/server"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	pb "tag-service/proto"
+	"tag-service/server"
 )
 
 var port string

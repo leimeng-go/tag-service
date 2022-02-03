@@ -14,19 +14,19 @@ import (
 	"github.com/coreos/etcd/proxy/grpcproxy"
 
 	assetfs "github.com/elazarl/go-bindata-assetfs"
-	"github.com/go-programming-tour-book/tag-service/internal/middleware"
-	"github.com/go-programming-tour-book/tag-service/pkg/swagger"
+	"tag-service/internal/middleware"
+	"tag-service/pkg/swagger"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
-	pb "github.com/go-programming-tour-book/tag-service/proto"
-	"github.com/go-programming-tour-book/tag-service/server"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	pb "tag-service/proto"
+	"tag-service/server"
 )
 
 var port string

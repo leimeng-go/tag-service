@@ -10,11 +10,11 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
-	pb "github.com/go-programming-tour-book/tag-service/proto"
-	"github.com/go-programming-tour-book/tag-service/server"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	pb "tag-service/proto"
+	"tag-service/server"
 )
 
 var port string

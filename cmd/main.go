@@ -9,18 +9,18 @@ import (
 	"strings"
 
 	assetfs "github.com/elazarl/go-bindata-assetfs"
-	"github.com/go-programming-tour-book/tag-service/global"
-	"github.com/go-programming-tour-book/tag-service/internal/middleware"
-	"github.com/go-programming-tour-book/tag-service/pkg/swagger"
-	"github.com/go-programming-tour-book/tag-service/pkg/tracer"
-	pb "github.com/go-programming-tour-book/tag-service/proto"
-	"github.com/go-programming-tour-book/tag-service/server"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	gwruntime "github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	"tag-service/global"
+	"tag-service/internal/middleware"
+	"tag-service/pkg/swagger"
+	"tag-service/pkg/tracer"
+	pb "tag-service/proto"
+	"tag-service/server"
 )
 
 var port string
@@ -44,6 +44,7 @@ func setupTracer() error {
 	return nil
 }
 
+//go:generate protoc -I=../proto -I=$(GOPATH)/src/ --go_out=../proto
 func main() {
 	err := RunServer(port)
 	if err != nil {

@@ -6,15 +6,15 @@ import (
 
 	"google.golang.org/grpc/metadata"
 
-	"github.com/go-programming-tour-book/tag-service/global"
+	"tag-service/global"
 
-	"github.com/go-programming-tour-book/tag-service/internal/middleware"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	"tag-service/internal/middleware"
 
-	"github.com/go-programming-tour-book/tag-service/pkg/tracer"
+	"tag-service/pkg/tracer"
 
-	pb "github.com/go-programming-tour-book/tag-service/proto"
 	"google.golang.org/grpc"
+	pb "tag-service/proto"
 )
 
 func init() {

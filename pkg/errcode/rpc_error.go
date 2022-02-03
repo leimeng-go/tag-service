@@ -1,9 +1,9 @@
 package errcode
 
 import (
-	pb "github.com/go-programming-tour-book/tag-service/proto"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	pb "tag-service/proto"
 )
 
 func TogRPCError(err *Error) error {

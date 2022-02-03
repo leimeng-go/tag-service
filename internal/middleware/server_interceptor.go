@@ -6,15 +6,15 @@ import (
 	"runtime/debug"
 	"time"
 
-	"github.com/go-programming-tour-book/tag-service/pkg/metatext"
+	"tag-service/pkg/metatext"
 
-	"github.com/go-programming-tour-book/tag-service/global"
+	"tag-service/global"
 
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/go-programming-tour-book/tag-service/pkg/errcode"
+	"tag-service/pkg/errcode"
 
 	"google.golang.org/grpc"
 )
