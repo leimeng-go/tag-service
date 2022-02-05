@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"google.golang.org/grpc"
 	"log"
 	"net/http"
 	"path"
@@ -13,7 +14,6 @@ import (
 	gwruntime "github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"tag-service/global"
 	"tag-service/internal/middleware"
@@ -44,7 +44,6 @@ func setupTracer() error {
 	return nil
 }
 
-//go:generate protoc -I=../proto -I=$(GOPATH)/src/ --go_out=../proto
 func main() {
 	err := RunServer(port)
 	if err != nil {
@@ -55,7 +54,7 @@ func main() {
 func runGrpcGatewayServer() *gwruntime.ServeMux {
 	endpoint := "0.0.0.0:" + port
 	gwmux := gwruntime.NewServeMux()
-	dopts := []grpc.DialOption{grpc.WithInsecure()}
+	dopts := []grpc.DialOption{}
 	_ = pb.RegisterTagServiceHandlerFromEndpoint(context.Background(), gwmux, endpoint, dopts)
 
 	return gwmux
