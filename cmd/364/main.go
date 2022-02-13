@@ -5,13 +5,14 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	gwruntime "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	clientv3 "go.balancer.io/balancer/client/v3"
 	"log"
 	"net/http"
 	"strings"
 	"time"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
-	"go.etcd.io/etcd/proxy/grpcproxy"
 	"tag-service/internal/middleware"
 
 	"google.golang.org/grpc/codes"
@@ -20,7 +21,6 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
-	"github.com/coreos/etcd/clientv3"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -49,7 +49,7 @@ func RunServer(port string) error {
 	grpcS := runGrpcServer()
 
 	endpoint := "0.0.0.0:" + port
-	gwmux := runtime.NewServeMux()
+	gwmux := gwruntime.NewServeMux()
 	dopts := []grpc.DialOption{grpc.WithInsecure()}
 	_ = pb.RegisterTagServiceHandlerFromEndpoint(context.Background(), gwmux, endpoint, dopts)
 	httpMux.Handle("/", gwmux)

@@ -6,9 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/coreos/etcd/clientv3"
-	"github.com/coreos/etcd/clientv3/naming"
-
+	clientv3 "go.balancer.io/balancer/client/v3"
 	"google.golang.org/grpc"
 	pb "tag-service/proto"
 )
@@ -40,6 +38,6 @@ func GetClientConn(ctx context.Context, serviceName string, opts []grpc.DialOpti
 
 	r := &naming.GRPCResolver{Client: cli}
 	target := fmt.Sprintf("/etcdv3://go-programming-tour/grpc/%s", serviceName)
-	opts = append(opts, grpc.WithInsecure(), grpc.WithBalancer(grpc.RoundRobin(r)), grpc.WithBlock())
+	opts = append(opts, grpc.WithBalancerName(grpc.RoundRobin(r)), grpc.WithBlock())
 	return grpc.DialContext(ctx, target, opts...)
 }
