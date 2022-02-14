@@ -5,7 +5,10 @@ import (
 	"flag"
 	"fmt"
 	assetfs "github.com/elazarl/go-bindata-assetfs"
-	"google.golang.org/grpc/resolver"
+	clientv3 "go.etcd.io/etcd/client/v3"
+	"google.golang.org/grpc/credentials/insecure"
+	"tag-service/pkg/balancer"
+
 	"log"
 	"net/http"
 	"path"
@@ -19,13 +22,15 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	clientv3 "go.balancer.io/balancer/client/v3"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	pb "tag-service/proto"
 	"tag-service/server"
+)
 
+const (
+	SERVICE_NAME = "tag-service"
 )
 
 var port string
@@ -33,54 +38,6 @@ var port string
 func init() {
 	flag.StringVar(&port, "port", "8004", "启动端口号")
 	flag.Parse()
-}
-
-const schema = "balancer"
-const SERVICE_NAME = "tag-service"
-
-type Resolver struct {
-	endpoints []string
-	service   string
-	cli       *clientv3.Client
-	cc        resolver.ClientConn
-}
-
-func NewResolver(endpoints []string, service string) resolver.Builder {
-	return &Resolver{endpoints: endpoints, service: service}
-}
-
-func (r *Resolver) Schema() string {
-	return schema + "_" + r.service
-}
-func (r *Resolver) ResolverNow(rn resolver.ResolveNowOptions) {
-}
-
-func (r *Resolver) Close() {
-
-}
-
-func (r *Resolver) Build(target resolver.Target, cc resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
-	var err error
-	r.cli, err = clientv3.New(clientv3.Config{
-		Endpoints: r.endpoints,
-	})
-	if err!=nil{
-		return nil,fmt.Errorf("grpclb: create clientv3 client failed: %v", err)
-	}
-	r.cc=cc
-	go r.
-}
-
-func (r *Resolver)watch(prefix string) {
-	var addrList []resolver.Address
-	getResp,err:=r.cli.Get(context.Background(),prefix,clientv3.WithPrefix())
-	if err!=nil{
-		log.Println(err)
-	}else {
-		for i:=range getResp.Kvs{
-			addrList=append(addrList,resolver.Address{Addr: strings.TrimPrefix()})
-		}
-	}
 }
 
 func main() {
@@ -96,7 +53,7 @@ func RunServer(port string) error {
 
 	endpoint := "0.0.0.0:" + port
 	gwmux := runtime.NewServeMux()
-	dopts := []grpc.DialOption{grpc.WithInsecure()}
+	dopts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 	_ = pb.RegisterTagServiceHandlerFromEndpoint(context.Background(), gwmux, endpoint, dopts)
 	httpMux.Handle("/", gwmux)
 
@@ -109,8 +66,9 @@ func RunServer(port string) error {
 	}
 	defer etcdClient.Close()
 
-	target := fmt.Sprintf("/etcdv3://go-programming-tour/grpc/%s", SERVICE_NAME)
-	grpcproxy.Register(etcdClient, target, ":"+port, 60)
+	//target := fmt.Sprintf("/etcdv3://go-programming-tour/grpc/%s", SERVICE_NAME)
+	//grpcproxy.Register(etcdClient, target, ":"+port, 60)
+	go balancer.Register("http://localhost:2379", fmt.Sprintf("grpc/%s", SERVICE_NAME), "localhost:8004", 1)
 
 	return http.ListenAndServe(":"+port, grpcHandlerFunc(grpcS, httpMux))
 }

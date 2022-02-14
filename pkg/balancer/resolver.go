@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	schema = "hahah"
+	schema = "etcd"
 )
 
 var cli *clientv3.Client

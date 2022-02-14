@@ -3,8 +3,6 @@ package server
 import (
 	"context"
 	"encoding/json"
-	log "github.com/sirupsen/logrus"
-
 	"tag-service/pkg/bapi"
 	"tag-service/pkg/errcode"
 
@@ -19,6 +17,7 @@ import (
 )
 
 type TagServer struct {
+	pb.UnimplementedTagServiceServer
 }
 
 func NewTagServer() *TagServer {
@@ -38,9 +37,6 @@ func (t *TagServer) GetTagList(ctx context.Context, r *pb.GetTagListRequest) (*p
 		return nil, errcode.TogRPCError(errcode.Fail)
 	}
 	return &tagList, nil
-}
-func (t *TagServer) mustEmbedUnimplementedTagServiceServer() {
-	log.Info("哈哈")
 }
 
 func GetClientConn(ctx context.Context, target string, opts []grpc.DialOption) (*grpc.ClientConn, error) {
