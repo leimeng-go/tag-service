@@ -6,7 +6,7 @@ import (
 	"flag"
 	"fmt"
 	gwruntime "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	clientv3 "go.balancer.io/balancer/client/v3"
+	clientv3 "go.etcd.io/etcd/client/v3"
 	"log"
 	"net/http"
 	"strings"
@@ -14,6 +14,7 @@ import (
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"tag-service/internal/middleware"
+	"tag-service/pkg/balancer"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -63,9 +64,9 @@ func RunServer(port string) error {
 	}
 	defer etcdClient.Close()
 
-	target := fmt.Sprintf("/etcdv3://go-programming-tour/grpc/%s", SERVICE_NAME)
-	grpcproxy.Register(etcdClient, target, ":"+port, 60)
-
+	//target := fmt.Sprintf("/etcdv3://go-programming-tour/grpc/%s", SERVICE_NAME)
+	//grpcproxy.Register(etcdClient, target, ":"+port, 60)
+	go balancer.Register("http://localhost:2379", fmt.Sprintf("grpc/%s", SERVICE_NAME), "localhost:8004", 1)
 	return http.ListenAndServe(":"+port, grpcHandlerFunc(grpcS, httpMux))
 }
 

@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
-	"time"
-
-	clientv3 "go.balancer.io/balancer/client/v3"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/resolver"
+	"log"
+	"tag-service/pkg/balancer"
 	pb "tag-service/proto"
+	"time"
 )
 
 func main() {
@@ -27,17 +28,23 @@ func main() {
 }
 
 func GetClientConn(ctx context.Context, serviceName string, opts []grpc.DialOption) (*grpc.ClientConn, error) {
-	config := clientv3.Config{
-		Endpoints:   []string{"http://localhost:2379"},
-		DialTimeout: time.Second * 60,
-	}
-	cli, err := clientv3.New(config)
-	if err != nil {
-		return nil, err
-	}
+	r := balancer.NewResolver("localhost:2378")
+	resolver.Register(r)
 
-	r := &naming.GRPCResolver{Client: cli}
-	target := fmt.Sprintf("/etcdv3://go-programming-tour/grpc/%s", serviceName)
-	opts = append(opts, grpc.WithBalancerName(grpc.RoundRobin(r)), grpc.WithBlock())
-	return grpc.DialContext(ctx, target, opts...)
+	conn, err := grpc.Dial(r.Scheme()+"://author/project/test", grpc.WithDefaultServiceConfig("round_robin"), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		panic(err)
+	}
+	client := pb.NewTagServiceClient(conn)
+	for {
+		resp, err := client.GetTagList(ctx, &pb.GetTagListRequest{
+			Name: "haha",
+		}, grpc.WaitForReady(true))
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			fmt.Println(resp)
+		}
+		<-time.After(time.Second)
+	}
 }
