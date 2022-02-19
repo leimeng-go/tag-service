@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"net/http"
 	"path"
@@ -54,7 +55,7 @@ func main() {
 func runGrpcGatewayServer() *gwruntime.ServeMux {
 	endpoint := "0.0.0.0:" + port
 	gwmux := gwruntime.NewServeMux()
-	dopts := []grpc.DialOption{}
+	dopts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 	_ = pb.RegisterTagServiceHandlerFromEndpoint(context.Background(), gwmux, endpoint, dopts)
 
 	return gwmux
@@ -70,6 +71,7 @@ func RunServer(port string) error {
 }
 
 func runHttpServer() *http.ServeMux {
+	//新建一个http请求多路服用器
 	serveMux := http.NewServeMux()
 	serveMux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte(`pong`))
